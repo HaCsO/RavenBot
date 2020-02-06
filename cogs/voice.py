@@ -7,7 +7,7 @@ class Voice(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 		self.users = {}
-		self.color = 0x00ff00
+		self.color = 0xff7733
 
 	@commands.Cog.listener()
 	async def on_voice_state_update(self, member, before, after):
