@@ -10,6 +10,15 @@ class Voice(commands.Cog):
 		self.color = 0xff7733
 
 	@commands.Cog.listener()
+	async def on_command_error(self, ctx, error):
+		print(f"<{error}>")
+		ctx_command = str(ctx.message.content.split(" ")[0])
+		if isinstance(error, commands.CommandNotFound):
+			await ctx.message.delete()
+			await ctx.send(f"{ctx.message.author.mention} ``Прости ,но команды нету ¯\_(ツ)_/¯``", delete_after= 3)
+	
+			
+	@commands.Cog.listener()
 	async def on_voice_state_update(self, member, before, after):
 		if member == self.bot.user:
 			return
@@ -59,7 +68,7 @@ class Voice(commands.Cog):
 			res = f"{time}"
 
 		emb.add_field(name="Голосовой онлайн", value= res)
-		await ctx.send(embed=emb)
+		await ctx.send(embed=emb,delete_after=10)
 		db.close()
 		
 
@@ -79,7 +88,7 @@ class Voice(commands.Cog):
 			except Exception:
 				pass
 		
-		await ctx.send(embed= emb)
+		await ctx.send(embed= emb,delete_after=10)
 
 
 
