@@ -68,7 +68,7 @@ class Voice(commands.Cog):
 			res = f"{time}"
 
 		emb.add_field(name="Голосовой онлайн", value= res)
-		await ctx.send(embed=emb,delete_after=10)
+		await ctx.send(embed=emb,delete_after=30)
 		db.close()
 		
 
@@ -88,7 +88,7 @@ class Voice(commands.Cog):
 			except Exception:
 				pass
 		
-		await ctx.send(embed= emb,delete_after=10)
+		await ctx.send(embed= emb,delete_after=30)
 
 
 
