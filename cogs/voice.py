@@ -23,6 +23,11 @@ class Voice(commands.Cog):
 				self.roles[f'role{i}'] = {'id': f'{id}', 'prise': prise}
 
 	@commands.Cog.listener()
+	async def on_member_join(self, member):
+		role = discord.utils.get(member.guild.roles, id=487691377346347009)
+		await member.add_roles(role)
+				
+	@commands.Cog.listener()
 	async def on_voice_state_update(self, member, before, after):
 		if member == self.bot.user:
 			return
