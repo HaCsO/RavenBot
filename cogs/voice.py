@@ -29,6 +29,8 @@ class Voice(commands.Cog):
 				
 	@commands.Cog.listener()
 	async def on_voice_state_update(self, member, before, after):
+		if member.Bot:
+			return
 		if member == self.bot.user:
 			return
 		
@@ -115,11 +117,13 @@ class Voice(commands.Cog):
 		cur = db.cursor()
 		cur.execute(f'SELECT * FROM users ORDER BY voiceTime DESC LIMIT 0, 10')
 		res = cur.fetchall()
+		num = 0
 		for i in res:
+			num += 1
 			try:
 				usr = self.bot.get_user(i[0])
 				time = datetime.timedelta(seconds=int(i[1]))
-				emb.add_field(name=f"{usr.name}", value=f"{time}", inline=True)
+				emb.add_field(name=f"{num}.{usr.name}", value=f"{time}", inline=True)
 			except Exception:
 				pass
 		
