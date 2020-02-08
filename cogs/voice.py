@@ -119,7 +119,7 @@ class Voice(commands.Cog):
 			try:
 				usr = self.bot.get_user(i[0])
 				time = datetime.timedelta(seconds=int(i[1]))
-				emb.add_field(name=f"{usr.name}", value=f"{time}", inline=False)
+				emb.add_field(name=f"{usr.name}", value=f"{time}", inline=True)
 			except Exception:
 				pass
 		
