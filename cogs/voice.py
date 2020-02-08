@@ -60,7 +60,7 @@ class Voice(commands.Cog):
 				timeNew = timeOld + timedelta
 				for i in range(1, self.roleCount+1):
 					if self.roles[f'role{i}']['prise'] <= timeNew.total_seconds():
-						maxRoleN = i
+						maxRoleN = i-1
 						maxRole = f"role{i}"
 
 				if maxRole:
