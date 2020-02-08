@@ -65,9 +65,12 @@ class Voice(commands.Cog):
 
 				if maxRole:
 					role = discord.utils.get(member.guild.roles, id=int(self.roles[maxRole]['id']))
-					roleOld = discord.utils.get(member.guild.roles, id=int(self.roles[f"role{maxRoleN}"]['id']))
+					if maxRoleN != 0:
+						roleOld = discord.utils.get(member.guild.roles, id=int(self.roles[f"role{maxRoleN}"]['id']))
+				
+						await member.remove_roles(roleOld)
+	
 					await member.add_roles(role)
-					await member.remove_roles(roleOld)
 					await member.send(f"{member.mention} поздравляю! Ты достиг роли `{role.name}`!")
 
 
