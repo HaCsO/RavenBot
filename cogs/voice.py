@@ -29,7 +29,7 @@ class Voice(commands.Cog):
 				
 	@commands.Cog.listener()
 	async def on_voice_state_update(self, member, before, after):
-		if member.Bot:
+		if member.bot:
 			return
 		if member == self.bot.user:
 			return
