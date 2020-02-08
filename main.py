@@ -6,6 +6,7 @@ cfg = configparser.ConfigParser()
 cfg.read("cog_list.ini")
 
 bot = commands.Bot(command_prefix=cfg['GEN']['prefix'])
+bot.remove_command('help')
 
 exts = []
 for i in range(len(cfg['COGS'])):
