@@ -2,22 +2,26 @@ import discord
 from discord.ext import commands
 from cogs.utils.db import Connect
 import datetime
+import configparser
 
 class Voice(commands.Cog):
 	def __init__(self, bot):
+		cfg = configparser.ConfigParser()
+		cfg.read("cogs/roles.ini")
 		self.bot = bot
 		self.users = {}
 		self.color = 0xff7733
+		
+		if len(cfg['ROLES']) != len(cfg['PRISE']):
+			raise Exception("Config is wrong!")
+		else:
+			self.roles = {}
+			for i in range(1, len(cfg['ROLES'])+1):
+				self.roleCount = len(cfg['ROLES'])
+				id = int(cfg['ROLES'][f'role{i}'])
+				prise = int(cfg['PRISE'][f'role{i}'])
+				self.roles[f'role{i}'] = {'id': f'{id}', 'prise': prise}
 
-	@commands.Cog.listener()
-	async def on_command_error(self, ctx, error):
-		print(f"<{error}>")
-		ctx_command = str(ctx.message.content.split(" ")[0])
-		if isinstance(error, commands.CommandNotFound):
-			await ctx.message.delete()
-			await ctx.send(f"{ctx.message.author.mention} ``Прости ,но команды нету ¯\_(ツ)_/¯``", delete_after= 3)
-	
-			
 	@commands.Cog.listener()
 	async def on_voice_state_update(self, member, before, after):
 		if member == self.bot.user:
@@ -38,12 +42,35 @@ class Voice(commands.Cog):
 			cur.execute(f'SELECT voiceTime FROM users WHERE id = {member.id}')
 			timeOld_r = cur.fetchall()
 			if not timeOld_r:
+				maxRole = None
+				for i in range(1, self.roleCount+1):
+					if self.roles[f'role{i}']['prise'] <= timedelta.total_seconds():
+						maxRole = f"role{i}"
+
+				if maxRole:
+					role = discord.utils.get(member.guild.roles, id=int(self.roles[maxRole]['id']))
+					await member.add_roles(role)
+
+					await member.send(f"{member.mention} поздравляю! Ты достиг роли `{role.name}`!")
 				cur.execute(f"INSERT INTO users(id, voiceTime) VALUES ({member.id}, {timedelta.total_seconds()})")
 				db.commit()
 			else:
+				maxRole = None
 				timeOld = datetime.timedelta(seconds=timeOld_r[0][0])
 				timeNew = timeOld + timedelta
-				
+				for i in range(1, self.roleCount+1):
+					if self.roles[f'role{i}']['prise'] <= timeNew.total_seconds():
+						maxRoleN = i
+						maxRole = f"role{i}"
+
+				if maxRole:
+					role = discord.utils.get(member.guild.roles, id=int(self.roles[maxRole]['id']))
+					roleOld = discord.utils.get(member.guild.roles, id=int(self.roles[f"role{maxRoleN}"]['id']))
+					await member.add_roles(role)
+					await member.remove_roles(roleOld)
+					await member.send(f"{member.mention} поздравляю! Ты достиг роли `{role.name}`!")
+
+
 				cur.execute(f"UPDATE users SET voiceTime = {timeNew.total_seconds()} WHERE id = {member.id}")
 				db.commit()
 			
@@ -68,7 +95,7 @@ class Voice(commands.Cog):
 			res = f"{time}"
 
 		emb.add_field(name="Голосовой онлайн", value= res)
-		await ctx.send(embed=emb,delete_after=30)
+		await ctx.send(embed=emb)
 		db.close()
 		
 
@@ -88,8 +115,26 @@ class Voice(commands.Cog):
 			except Exception:
 				pass
 		
-		await ctx.send(embed= emb,delete_after=30)
+		await ctx.send(embed= emb)
 
+	@commands.command(aliases=['help', 'помощ', 'gjvjo', 'рудз'])
+	async def _help(self, ctx):
+		emb = discord.Embed(title="Все команды", description="Все что в () тоже работает как команда", colour=self.color)
+		emb.set_author(name= self.bot.user.name, icon_url=self.bot.user.avatar_url)
+		emb.set_footer(text= "Запросил " + ctx.message.author.display_name, icon_url= ctx.message.author.avatar_url)
+		emb.add_field(name= "help(помощ)", value= "Вызвать это сообщение")
+		emb.add_field(name= "time(время)", value= "Посмотреть количество времени которые ты провел в голосовых каналах")
+		emb.add_field(name= "top(топ)", value= "Топ пользователей по времени")
+
+		try:
+			await ctx.message.author.send(embed= emb)
+		except Exception:
+			async with ctx.message.channel.typing():
+				await ctx.send(embed= emb,
+				content= f"{ctx.message.author.mention}``, прости но я не могу тебе написать поэтому это сообщение скоро изчезнет чтобы не спамить...``",
+				delete_after= 15)
+		finally:
+			await ctx.message.delete()
 
 
 def setup(bot):
