@@ -94,6 +94,9 @@ class Voice(commands.Cog):
 	async def _time(self, ctx):
 		await ctx.message.delete()
 		emb = discord.Embed(title="voice time", colour= self.color)
+		emb.set_author(name= self.bot.user.name, icon_url=self.bot.user.avatar_url)
+		emb.set_footer(text= "Запросил " + ctx.message.author.display_name, icon_url= ctx.message.author.avatar_url)
+
 		db = Connect.conn()
 		cur = db.cursor()
 		cur.execute(f"SELECT voiceTime FROM users WHERE id = {ctx.author.id}")
@@ -113,6 +116,9 @@ class Voice(commands.Cog):
 	async def _top(self, ctx):
 		await ctx.message.delete()
 		emb = discord.Embed(title= "top", colour=self.color)
+		emb.set_author(name= self.bot.user.name, icon_url=self.bot.user.avatar_url)
+		emb.set_footer(text= "Запросил " + ctx.message.author.display_name, icon_url= ctx.message.author.avatar_url)
+
 		db = Connect.conn()
 		cur = db.cursor()
 		cur.execute(f'SELECT * FROM users ORDER BY voiceTime DESC LIMIT 0, 10')
