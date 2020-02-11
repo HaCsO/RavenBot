@@ -135,24 +135,24 @@ class Voice(commands.Cog):
 		
 		await ctx.send(embed= emb)
 
-	@commands.command(aliases=['help', 'помощ', 'gjvjo', 'рудз'])
-	async def _help(self, ctx):
-		emb = discord.Embed(title="Все команды", description="Все что в () тоже работает как команда", colour=self.color)
-		emb.set_author(name= self.bot.user.name, icon_url=self.bot.user.avatar_url)
-		emb.set_footer(text= "Запросил " + ctx.message.author.display_name, icon_url= ctx.message.author.avatar_url)
-		emb.add_field(name= "help(помощ)", value= "Вызвать это сообщение")
-		emb.add_field(name= "time(время)", value= "Посмотреть количество времени которые ты провел в голосовых каналах")
-		emb.add_field(name= "top(топ)", value= "Топ пользователей по времени")
+#	@commands.command(aliases=['help', 'помощ', 'gjvjo', 'рудз'])
+#	async def _help(self, ctx):
+#		emb = discord.Embed(title="Все команды", description="Все что в () тоже работает как команда", colour=self.color)
+#		emb.set_author(name= self.bot.user.name, icon_url=self.bot.user.avatar_url)
+#		emb.set_footer(text= "Запросил " + ctx.message.author.display_name, icon_url= ctx.message.author.avatar_url)
+#		emb.add_field(name= "help(помощ)", value= "Вызвать это сообщение")
+#		emb.add_field(name= "time(время)", value= "Посмотреть количество времени которые ты провел в голосовых каналах")
+#		emb.add_field(name= "top(топ)", value= "Топ пользователей по времени")
 
-		try:
-			await ctx.message.author.send(embed= emb)
-		except Exception:
-			async with ctx.message.channel.typing():
-				await ctx.send(embed= emb,
-				content= f"{ctx.message.author.mention}``, прости но я не могу тебе написать поэтому это сообщение скоро изчезнет чтобы не спамить...``",
-				delete_after= 15)
-		finally:
-			await ctx.message.delete()
+#		try:
+#			await ctx.message.author.send(embed= emb)
+#		except Exception:
+#			async with ctx.message.channel.typing():
+#				await ctx.send(embed= emb,
+#				content= f"{ctx.message.author.mention}``, прости но я не могу тебе написать поэтому это сообщение скоро изчезнет чтобы не спамить...``",
+#				delete_after= 15)
+#		finally:
+#			await ctx.message.delete()
 
 
 def setup(bot):
