@@ -37,15 +37,19 @@ class Voice(commands.Cog):
 		if after.channel and before.channel:
 			pass
 		elif before.channel:
-			if not self.users[f"{member.id}"]:
+			db = Connect.conn()
+			cur = db.cursor()
+
+			cur.execute(f"SELECT startTime FROM users WHERE id = {member.id}")
+			dbExecucion = int(cur.fetchall())
+			if not dbExecucion:
 				return
 
 			time = datetime.datetime.now()
-			time_old = self.users[f"{member.id}"]
+			time_old = datetime.timedelta(seconds=dbExecucion)
 
 			timedelta = time - time_old
-			db = Connect.conn()
-			cur = db.cursor()
+
 			cur.execute(f'SELECT voiceTime FROM users WHERE id = {member.id}')
 			timeOld_r = cur.fetchall()
 			if not timeOld_r:
@@ -88,7 +92,19 @@ class Voice(commands.Cog):
 
 		elif after.channel:
 			time = datetime.datetime.now()
-			self.users[f"{member.id}"] = time
+			db = Connect.conn()
+			cur = db.cursor()
+			time = (time.microseconds + (time.seconds + time.days * 24 * 3600) * 10**6) / 10**6
+			print(time)
+			cur.execute(f"SELECT * FROM users WHERE id = {member.id}")
+			if not cur.fetchall():
+				cur.execute(f"INSERT INTO users(id, voiceTime, startTime) VALUES ({member.id}, 0, {time})")
+				db.commit()
+				db.close()
+			else:
+				cur.execute(f"UPDATE users SET startTime = {time} WHERE id = {member.id}")
+				db.commit()
+				db.close()
 
 	@commands.command(aliases=["время", "time", "dhtvz", "ешьу"])
 	async def _time(self, ctx):
