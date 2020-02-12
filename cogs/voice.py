@@ -21,6 +21,10 @@ class Voice(commands.Cog):
 				id = int(cfg['ROLES'][f'role{i}'])
 				prise = int(cfg['PRISE'][f'role{i}'])
 				self.roles[f'role{i}'] = {'id': f'{id}', 'prise': prise}
+				
+	@commands.Cog.listener()
+	async def on_message(self, msg):
+		print("msg\n")
 
 	@commands.Cog.listener()
 	async def on_member_join(self, member):
