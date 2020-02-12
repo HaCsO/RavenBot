@@ -49,6 +49,9 @@ class Voice(commands.Cog):
 			time = datetime.datetime.now()
 			time_old = datetime.timedelta(seconds=int(dbExecution[0][0]))
 
+			print(time)
+			print(time_old)
+			
 			timedelta = time - time_old
 
 			print(timedelta)
@@ -73,6 +76,7 @@ class Voice(commands.Cog):
 				
 				maxRole = None
 				timeOld = datetime.timedelta(seconds=timeOld_r[0][0])
+				print(timeOld)
 				timeNew = timeOld + timedelta
 				print(timeNew)
 				for i in range(1, self.roleCount+1):
