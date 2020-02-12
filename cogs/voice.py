@@ -41,9 +41,11 @@ class Voice(commands.Cog):
 			cur = db.cursor()
 
 			cur.execute(f"SELECT startTime FROM users WHERE id = {member.id}")
-			dbExecucion = int(cur.fetchall())
+			dbExecucion = cur.fetchall()
+			print(dbExecution)
 			if not dbExecucion:
 				return
+			int(dbExecution[0])
 
 			time = datetime.datetime.now()
 			time_old = datetime.timedelta(seconds=dbExecucion)
@@ -94,7 +96,7 @@ class Voice(commands.Cog):
 			time = datetime.datetime.now()
 			db = Connect.conn()
 			cur = db.cursor()
-			time = (time.microseconds + (time.seconds + time.days * 24 * 3600) * 10**6) / 10**6
+			time = (time.microsecond + (time.second + time.day * 24 * 3600) * 10**6) / 10**6
 			print(time)
 			cur.execute(f"SELECT * FROM users WHERE id = {member.id}")
 			if not cur.fetchall():
