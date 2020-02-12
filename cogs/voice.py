@@ -55,6 +55,7 @@ class Voice(commands.Cog):
 			
 			cur.execute(f'SELECT voiceTime FROM users WHERE id = {member.id}')
 			timeOld_r = cur.fetchall()
+			print(timeOld_r)
 			if not timeOld_r:
 				maxRole = None
 				for i in range(1, self.roleCount+1):
