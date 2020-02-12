@@ -41,14 +41,14 @@ class Voice(commands.Cog):
 			cur = db.cursor()
 
 			cur.execute(f"SELECT startTime FROM users WHERE id = {member.id}")
-			dbExecucion = cur.fetchall()
+			dbExecution = cur.fetchall()
 			print(dbExecution)
-			if not dbExecucion:
+			if not dbExecution:
 				return
 			int(dbExecution[0])
 
 			time = datetime.datetime.now()
-			time_old = datetime.timedelta(seconds=dbExecucion)
+			time_old = datetime.timedelta(seconds=dbExecution)
 
 			timedelta = time - time_old
 
