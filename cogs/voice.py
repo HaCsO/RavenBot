@@ -45,7 +45,7 @@ class Voice(commands.Cog):
 			print(dbExecution)
 			if not dbExecution:
 				return
-			int(dbExecution[0])
+			int(dbExecution[0][0])
 
 			time = datetime.datetime.now()
 			time_old = datetime.timedelta(seconds=dbExecution)
