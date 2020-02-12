@@ -51,6 +51,8 @@ class Voice(commands.Cog):
 
 			timedelta = time - time_old
 
+			print(timedelta)
+			
 			cur.execute(f'SELECT voiceTime FROM users WHERE id = {member.id}')
 			timeOld_r = cur.fetchall()
 			if not timeOld_r:
@@ -67,9 +69,11 @@ class Voice(commands.Cog):
 				cur.execute(f"INSERT INTO users(id, voiceTime) VALUES ({member.id}, {timedelta.total_seconds()})")
 				db.commit()
 			else:
+				
 				maxRole = None
 				timeOld = datetime.timedelta(seconds=timeOld_r[0][0])
 				timeNew = timeOld + timedelta
+				print(timeNew)
 				for i in range(1, self.roleCount+1):
 					if self.roles[f'role{i}']['prise'] <= timeNew.total_seconds():
 						maxRoleN = i-1
