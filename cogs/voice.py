@@ -47,7 +47,7 @@ class Voice(commands.Cog):
 				return
 
 			time = datetime.datetime.now()
-			time_old = datetime.timedelta(seconds=int(dbExecution[0][0]))
+			time_old = dbExecution[0][0]
 
 			print(time)
 			print(time_old)
@@ -104,15 +104,14 @@ class Voice(commands.Cog):
 			time = datetime.datetime.now()
 			db = Connect.conn()
 			cur = db.cursor()
-			time = (time.microsecond + (time.second + time.day * 24 * 3600) * 10**6) / 10**6
-			print(time)
+			time = f"{time.year}-{time.month}-{time.day} {time.hour}:{time.minute}:{time.second}"
 			cur.execute(f"SELECT * FROM users WHERE id = {member.id}")
 			if not cur.fetchall():
-				cur.execute(f"INSERT INTO users(id, voiceTime, startTime) VALUES ({member.id}, 0, {time})")
+				cur.execute(f"INSERT INTO users(id, voiceTime, startTime) VALUES ({member.id}, 0, '{time}')")
 				db.commit()
 				db.close()
 			else:
-				cur.execute(f"UPDATE users SET startTime = {time} WHERE id = {member.id}")
+				cur.execute(f"UPDATE users SET startTime = '{time}' WHERE id = {member.id}")
 				db.commit()
 				db.close()
 
