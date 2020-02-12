@@ -24,7 +24,7 @@ class Voice(commands.Cog):
 				
 	@commands.Cog.listener()
 	async def on_message(self, msg):
-		print("msg\n")
+		pass
 
 	@commands.Cog.listener()
 	async def on_member_join(self, member):
