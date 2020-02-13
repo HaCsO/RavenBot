@@ -71,9 +71,12 @@ class Voice(commands.Cog):
 
 				if maxRole:
 					role = discord.utils.get(member.guild.roles, id=int(self.roles[maxRole]['id']))
-					await member.add_roles(role)
+					if role in member.roles:
+						pass
+					else:
+						await member.add_roles(role)
+						await member.send(f"{member.mention} поздравляю! Ты достиг роли `{role.name}`!")
 
-					await member.send(f"{member.mention} поздравляю! Ты достиг роли `{role.name}`!")
 				cur.execute(f"INSERT INTO users(id, voiceTime) VALUES ({member.id}, {timedelta.total_seconds()})")
 				db.commit()
 			else:
