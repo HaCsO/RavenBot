@@ -93,13 +93,13 @@ class Voice(commands.Cog):
 
 				if maxRole:
 					role = discord.utils.get(member.guild.roles, id=int(self.roles[maxRole]['id']))
-					if maxRoleN != 0:
-						roleOld = discord.utils.get(member.guild.roles, id=int(self.roles[f"role{maxRoleN}"]['id']))
-				
-						await member.remove_roles(roleOld)
-	
-					await member.add_roles(role)
-					await member.send(f"{member.mention} поздравляю! Ты достиг роли `{role.name}`!")
+					if role in member.roles:
+						pass
+						if maxRoleN != 0:
+							roleOld = discord.utils.get(member.guild.roles, id=int(self.roles[f"role{maxRoleN}"]['id']))			
+							await member.remove_roles(roleOld)
+						await member.add_roles(role)
+						await member.send(f"{member.mention} поздравляю! Ты достиг роли `{role.name}`!")
 
 
 				cur.execute(f"UPDATE users SET voiceTime = {timeNew.total_seconds()} WHERE id = {member.id}")
