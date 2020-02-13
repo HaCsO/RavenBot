@@ -46,23 +46,17 @@ class Voice(commands.Cog):
 
 			cur.execute(f"SELECT startTime FROM users WHERE id = {member.id}")
 			dbExecution = cur.fetchall()
-			print(dbExecution)
 			if not dbExecution:
 				return
 
 			time = datetime.datetime.now()
 			time_old = dbExecution[0][0]
 
-			print(time)
-			print(time_old)
 			
 			timedelta = time - time_old
-
-			print(timedelta)
 			
 			cur.execute(f'SELECT voiceTime FROM users WHERE id = {member.id}')
 			timeOld_r = cur.fetchall()
-			print(timeOld_r)
 			if not timeOld_r:
 				maxRole = None
 				for i in range(1, self.roleCount+1):
@@ -83,9 +77,7 @@ class Voice(commands.Cog):
 				
 				maxRole = None
 				timeOld = datetime.timedelta(seconds=timeOld_r[0][0])
-				print(timeOld)
 				timeNew = timeOld + timedelta
-				print(timeNew)
 				for i in range(1, self.roleCount+1):
 					if self.roles[f'role{i}']['prise'] <= timeNew.total_seconds():
 						maxRoleN = i-1
