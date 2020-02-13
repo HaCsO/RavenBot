@@ -93,8 +93,7 @@ class Voice(commands.Cog):
 
 				if maxRole:
 					role = discord.utils.get(member.guild.roles, id=int(self.roles[maxRole]['id']))
-					if role in member.roles:
-						pass
+					if role not in member.roles:
 						if maxRoleN != 0:
 							roleOld = discord.utils.get(member.guild.roles, id=int(self.roles[f"role{maxRoleN}"]['id']))			
 							await member.remove_roles(roleOld)
