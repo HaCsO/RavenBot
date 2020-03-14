@@ -11,7 +11,7 @@ class Voice(commands.Cog):
 		self.bot = bot
 		self.users = {}
 		self.color = 0xff7733
-		
+
 		if len(cfg['ROLES']) != len(cfg['PRISE']):
 			raise Exception("Config is wrong!")
 		else:
@@ -21,23 +21,19 @@ class Voice(commands.Cog):
 				id = int(cfg['ROLES'][f'role{i}'])
 				prise = int(cfg['PRISE'][f'role{i}'])
 				self.roles[f'role{i}'] = {'id': f'{id}', 'prise': prise}
-				
-	@commands.Cog.listener()
-	async def on_message(self, msg):
-		pass
 
 	@commands.Cog.listener()
 	async def on_member_join(self, member):
 		role = discord.utils.get(member.guild.roles, id=487691377346347009)
 		await member.add_roles(role)
-				
+
 	@commands.Cog.listener()
 	async def on_voice_state_update(self, member, before, after):
 		if member.bot:
 			return
 		if member == self.bot.user:
 			return
-		
+
 		if after.channel and before.channel:
 			pass
 		elif before.channel:
@@ -52,9 +48,9 @@ class Voice(commands.Cog):
 			time = datetime.datetime.now()
 			time_old = dbExecution[0][0]
 
-			
 			timedelta = time - time_old
-			
+			coins = round((timedelta.total_seconds() / 60) / 60)
+
 			cur.execute(f'SELECT voiceTime FROM users WHERE id = {member.id}')
 			timeOld_r = cur.fetchall()
 			if not timeOld_r:
@@ -70,11 +66,10 @@ class Voice(commands.Cog):
 					else:
 						await member.add_roles(role)
 						await member.send(f"{member.mention} поздравляю! Ты достиг роли `{role.name}`!")
-
-				cur.execute(f"INSERT INTO users(id, voiceTime) VALUES ({member.id}, {timedelta.total_seconds()})")
+				cur.execute(f"INSERT INTO users(id, voiceTime, coins) VALUES ({member.id}, {timedelta.total_seconds()}, {coins if coins != 0 else '0'})")
 				db.commit()
 			else:
-				
+
 				maxRole = None
 				timeOld = datetime.timedelta(seconds=timeOld_r[0][0])
 				timeNew = timeOld + timedelta
@@ -87,15 +82,19 @@ class Voice(commands.Cog):
 					role = discord.utils.get(member.guild.roles, id=int(self.roles[maxRole]['id']))
 					if role not in member.roles:
 						if maxRoleN != 0:
-							roleOld = discord.utils.get(member.guild.roles, id=int(self.roles[f"role{maxRoleN}"]['id']))			
+							roleOld = discord.utils.get(member.guild.roles, id=int(self.roles[f"role{maxRoleN}"]['id']))
 							await member.remove_roles(roleOld)
 						await member.add_roles(role)
 						await member.send(f"{member.mention} поздравляю! Ты достиг роли `{role.name}`!")
 
+				cur.execute(f'SELECT coins FROM users WHERE id = {member.id}')
+				res = cur.fetchall()
 
-				cur.execute(f"UPDATE users SET voiceTime = {timeNew.total_seconds()} WHERE id = {member.id}")
+				coins = res[0][0] + coins
+
+				cur.execute(f"UPDATE users SET voiceTime = {timeNew.total_seconds()}, coins = {coins} WHERE id = {member.id}")
 				db.commit()
-			
+
 			db.close()
 
 		elif after.channel:
@@ -123,17 +122,19 @@ class Voice(commands.Cog):
 		db = Connect.conn()
 		cur = db.cursor()
 		cur.execute(f"SELECT voiceTime FROM users WHERE id = {ctx.author.id}")
-		f = cur.fetchall()
+		f = cur.fetchone()
 		if not f:
 			res = "Вы еще не заходили в голосовой канал!"
 		else:
-			time = datetime.timedelta(seconds=f[0][0])
+			hours, remainder = divmod(f[0], 3600)
+			minutes, seconds = divmod(remainder, 60)
+			time = '{:02}ч {:02}м {:02}с'.format(int(hours), int(minutes), int(seconds))
 			res = f"{time}"
 
 		emb.add_field(name="Голосовой онлайн", value= res)
 		await ctx.send(embed=emb)
 		db.close()
-		
+
 
 	@commands.command(aliases=['top', 'топ', 'еоз', 'njg'])
 	async def _top(self, ctx):
@@ -151,11 +152,13 @@ class Voice(commands.Cog):
 			num += 1
 			try:
 				usr = self.bot.get_user(i[0])
-				time = datetime.timedelta(seconds=int(i[1]))
-				emb.add_field(name=f"{num}.{usr.name}", value=f"{time}", inline=True)
+				hours, remainder = divmod(i[1], 3600)
+				minutes, seconds = divmod(remainder, 60)
+				time = '{:02}ч {:02}м {:02}с'.format(int(hours), int(minutes), int(seconds))
+				emb.add_field(name=f"{num}.{usr.name}", value=f"{time}")
 			except Exception:
 				pass
-		
+
 		await ctx.send(embed= emb)
 
 #	@commands.command(aliases=['help', 'помощ', 'gjvjo', 'рудз'])
