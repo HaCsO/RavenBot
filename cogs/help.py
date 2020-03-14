@@ -165,7 +165,7 @@ https://discord.gg/3SKkjmb
 		"""
 
 		emb = discord.Embed(title="Инвайт", description=cnt, colour=0xff7733)
-		emb.set_image(url='https://tenor.com/view/excited-wink-and-point-lets-go-gif-13160964')
+		#emb.set_image(url='https://tenor.com/view/excited-wink-and-point-lets-go-gif-13160964')
 		await ctx.send("<@&578305659934605352>" ,embed=emb)
 
 def setup(bot):
