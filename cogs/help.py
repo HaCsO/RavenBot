@@ -49,8 +49,18 @@ class Helper(commands.Cog):
 	@commands.Cog.listener()
 	async def on_raw_reaction_add(self, payload):
 		if payload.message_id == self.msg.id:
-			...
-			
+			if payload.emoji.id == 677558374078087199:
+				role = self.bot.get_guild(487688244713095168).get_role(680447153184702486)
+				try:
+					await payload.member.add_roles(role)
+				except Exception:
+					pass
+			elif payload.emoji.id == 677558374078087199:
+				role = self.bot.get_guild(487688244713095168).get_role(680447241693167671)
+				try:
+					await payload.member.add_roles(role)
+				except Exception:
+					pass
 
 	@commands.command()
 	async def faq(self, ctx):
