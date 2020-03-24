@@ -248,7 +248,7 @@ class Economy(commands.Cog):
 				cnt = message.content
 				role = await self.bot.get_guild(487688244713095168).create_role(name=cnt)				
 				cat = self.bot.get_channel(534376287523831808).category
-				ovr = {role: discord.PermissionOverwrite(connect=True), discord.utiles.get(ctx.message.guild.roles, name="everyone"): discord.PermissionOverwrite(connect=False)}
+				ovr = {role: discord.PermissionOverwrite(connect=True), discord.utils.get(ctx.message.guild.roles, name="everyone"): discord.PermissionOverwrite(connect=False)}
 				chan = await self.bot.get_guild(487688244713095168).create_voice_channel(name=cnt, overwrites= ovr, category= cat)
 				await ctx.author.add_roles(role)
 				newEmbed= discord.Embed(title="Успешно!", description=f"Канал `{cnt}` создан! Вы можете зайти в панель управления командой `$panel`", colour = self.color)
