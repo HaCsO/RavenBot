@@ -119,8 +119,12 @@ class Economy(commands.Cog):
 			emb.add_field(name=f"Канал {'2️⃣' if not resC else '🗝️'}", value="Свой приватный канал (вы сами решите кто сможет зайти в этот канал, вам выдадуть роль с название этого канала и вы сможете пригласить в него до 4 человек), канал создаться под категорией 'Разговорчики' - 50 Ravencoin.")
 			emb.add_field(name=f"Поднять роль {'3️⃣' if hasRole and res == 0 else '🔒'}", value="Вашу роль выводиться выше стандартных ролей (в списке участников он будет подсвечиваться таким цветом - который выбрал при покупке 1 слота) - 25 Ravencoin.")
 			emb.add_field(name=f"Богач 4️⃣", value="Покупка роли `💎Богач💎`  - 1000 Ravencoin.")
+			emb.set_author(name= self.bot.user.name, icon_url=self.bot.user.avatar_url)
+			emb.set_footer(text= "Запросил " + ctx.message.author.display_name, icon_url= ctx.message.author.avatar_url)
+
 			return emb
 
+				      
 		emb = await getEmb()
 
 		cur.execute(f"SELECT buyedRole FROM users WHERE id = {ctx.author.id}")
@@ -362,6 +366,7 @@ class Economy(commands.Cog):
 			emb.add_field(name=f"Слот 2 {'🔓' if not cnn[3] else '🔒'}", value= f"{f'<@{cnn[3]}>' if cnn[3] else 'пусто'}", inline=False)
 			emb.add_field(name=f"Слот 3 {'🔓' if not cnn[4] else '🔒'}", value= f"{f'<@{cnn[4]}>' if cnn[4] else 'пусто'}", inline=False)
 			emb.add_field(name=f"Слот 4 {'🔓' if not cnn[5] else '🔒'}", value= f"{f'<@{cnn[5]}>' if cnn[5] else 'пусто'}", inline=False)
+			emb.set_author(name= ctx.author.name, icon_url=ctx.author.avatar_url)
 			
 			emb.set_footer(text="♻️ - сменить владельца; ➕ - добавить пользователя; ➖ - убрать пользователя")
 
