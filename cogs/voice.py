@@ -145,7 +145,7 @@ class Voice(commands.Cog):
 
 		db = Connect.conn()
 		cur = db.cursor()
-		cur.execute(f'SELECT * FROM users ORDER BY voiceTime DESC LIMIT 0, 10')
+		cur.execute(f'SELECT * FROM users ORDER BY voiceTime DESC LIMIT 0, 30')
 		res = cur.fetchall()
 		num = 0
 		for i in res:
