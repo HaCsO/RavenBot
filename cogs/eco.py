@@ -57,7 +57,7 @@ class Economy(commands.Cog):
 
 		conn = Connect.conn()
 		cur = conn.cursor()
-		cur.execute(f"SELECT * FROM users ORDER BY coins DESC LIMIT 0, 10")
+		cur.execute(f"SELECT * FROM users ORDER BY coins DESC LIMIT 0, 30")
 		res = cur.fetchall()
 		num = 0
 		emb = discord.Embed(title='Счет', colour = self.color)
